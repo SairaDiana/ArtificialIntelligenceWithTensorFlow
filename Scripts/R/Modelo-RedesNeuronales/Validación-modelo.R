@@ -1,7 +1,7 @@
 data1 <- read.csv("Heart3.csv")
 
-#Aplicamos un muestreo aleatorio simple para hacer el entrenamiento de nuestro modelo 
-#con el 20% de nuestros datos
+#Aplicamos un muestreo aleatorio simple para hacer la validacion de nuestro modelo 
+#con el 80% de nuestros datos
 muestra2<-data1[sample(1:303,243),]
 #View(muestra)
 
