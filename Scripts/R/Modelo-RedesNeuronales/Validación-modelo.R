@@ -1,8 +1,8 @@
-data1 <- read.csv("Heart3.csv")
+data1 <- read.csv("DIPLOMADO/MODULO IV/Proyecto-ModuloIV-MineriaDeDatos/DataSets/Heart3.csv")
 
 #Aplicamos un muestreo aleatorio simple para hacer la validacion de nuestro modelo 
 #con el 80% de nuestros datos
-muestra2<-data1[sample(1:303,243),]
+muestra2<-data1[sample(1:303,81),]
 #View(muestra)
 
 #Las siguientes lineas convierten a la variable objetivo en valores booleanos
@@ -24,9 +24,9 @@ prediccion <- compute(modelo, muestra2[1:12])
 prediccion
 which.max(prediccion$net.result[1,])
 result<-0
-for (i in 1:243) {result[i] <- which.max(prediccion$net.result[i,])}
-for (i in 1:243) {if (result[i]==1) {result[i] = "s"}}
-for (i in 1:243) {if (result[i]==2) {result[i] = "n"}}
+for (i in 1:81) {result[i] <- which.max(prediccion$net.result[i,])}
+for (i in 1:81) {if (result[i]==1) {result[i] = "s"}}
+for (i in 1:81) {if (result[i]==2) {result[i] = "n"}}
 
 
 #Se hace una comparación de las clases reales con las predicciones
