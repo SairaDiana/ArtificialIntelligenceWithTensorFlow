@@ -1,44 +1,39 @@
-data1 <- read.csv("DIPLOMADO/MODULO IV/Proyecto-ModuloIV-MineriaDeDatos/DataSets/DatosNormalizados.csv")
-#Aplicamos un muestreo aleatorio simple para hacer el entrenamiento de nuestro modelo 
-#con el 20% de nuestros datos
-set.seed(10)
-muestra<-data1[sample(1:303,212),]
+data1 <- read.csv("trainig.csv")
+#Aplicamos un muestreo aleatorio simple para hacer la validacion de nuestro modelo
 
-#Las siguientes lineas convierten a la variable objetivo(Target, que en este caso es la variable MEDV) en valores booleanos
-muestra$s<-c(muestra$MEDV=="s")
-muestra$n<-c(muestra$MEDV=="n")
+#Las siguientes lineas convierten a la variable objetivo en valores booleanos
+data1$s<-c(data1$MEDV=="s")
+data1$n<-c(data1$MEDV=="n")
 
-#Con la librería neuralnet se contruye la red neuronal con el algoritmo de retropropagación
-modelo=neuralnet(s + n ~ age + sex +	cp + trestbps + chol + restecg + thalach + exang	+ oldpeak	+ slope	+ ca	+thal,
-                 muestra, 
-                 hidden = 3, 
+#Con la librerï¿½a neuralnet se contruye la red neuronal con el algoritmo de retropropagaciï¿½n
+modelo=neuralnet(s + n ~ age	+ sex +	cp + trestbps + chol + restecg + thalach +	exang	+ oldpeak	+ slope	+ ca	+ thal,
+                 data1, hidden = 4,
                  lifesign = "full",
                  algorithm = "rprop+")
 
-#Ahora, se va a construir la gráfica de la red neuronal
+#Ahora, se va a construir la grï¿½fica de la red neuronal
 plot(modelo, rep = "best")
 plot(modelo, rep = "best", intercept = FALSE)
 
 #Ahora se recorre la tabla completa para hacer calculo de as predicciones
-prediccion <- compute(modelo, muestra[1:12])
+prediccion <- compute(modelo, data1[1:12])
 prediccion
 which.max(prediccion$net.result[1,])
 result<-0
-for (i in 212:212) {result[i] <- which.max(prediccion$net.result[i,])}
-for (i in 212:212) {if (result[i]==1) {result[i] = "s"}}
-for (i in 212:212) {if (result[i]==2) {result[i] = "n"}}
+for (i in 1:229) {result[i] <- which.max(prediccion$net.result[i,])}
+for (i in 1:229) {if (result[i]==1) {result[i] = "s"}}
+for (i in 1:229) {if (result[i]==2) {result[i] = "n"}}
 
 
-#Se hace una comparación de las clases reales con las predicciones
-comparacion<-muestra
+#Se hace una comparaciï¿½n de las clases reales con las predicciones
+comparacion<-data1
 comparacion$predicted<-result
 comparacion
 
-#Por último se obtiene la matriz de confusion, en la cual los valores de la diagonal son 
-#los más importantes, ya que con ellos se pueden calcular la precisión del modelo
-(MC <- table(muestra$MEDV, result))
-
+#Por ï¿½ltimo se obtiene la matriz de confusion, en la cual los valores de la diagonal son
+#los mï¿½s importantes, ya que con ellos se pueden calcular la precisiï¿½n del modelo
+(MC <- table(data1$MEDV, result))
 
 #Exportar la tabla con la predicciones para sacar tablas de contigencia
-setwd("C:/Users/saira/Documents/DIPLOMADO/MODULO IV/PROYECTO/DataSets")
-write.csv(comparacion, file="Prueba2.csv")
+setwd("C:/Users/saira/Documents/DIPLOMADO/MODULO IV/Proyecto-ModuloIV-MineriaDeDatos/DataSets/")
+write.csv(comparacion, file="prediccion-trainig.csv")
